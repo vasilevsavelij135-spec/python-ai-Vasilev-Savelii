@@ -1,3 +1,6 @@
+# Извлекаем страны мира с данными о континенте, столице, населении, площади, ВВП и валюте для анализа связи экономики, населения и территории.
+# Extracting countries with continent, capital, population, area, GDP, and currency data to analyze relationships between economy, population, and territory.
+
 SELECT
   ?country
   ?countryLabel
