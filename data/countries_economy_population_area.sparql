@@ -1,0 +1,39 @@
+SELECT
+  ?country
+  ?countryLabel
+  ?continentLabel
+  ?capitalLabel
+  ?population
+  ?area
+  (MAX(?gdpRaw) AS ?gdp)
+  ((MAX(?gdpRaw) / ?population) AS ?gdpPerCapitaCalculated)
+  ?currencyLabel
+WHERE {
+  ?country wdt:P31 wd:Q6256.
+
+  ?country wdt:P1082 ?population.
+  ?country wdt:P2046 ?area.
+  ?country wdt:P2131 ?gdpRaw.
+
+  OPTIONAL { ?country wdt:P30 ?continent. }
+  OPTIONAL { ?country wdt:P36 ?capital. }
+  OPTIONAL { ?country wdt:P38 ?currency. }
+
+  FILTER(?population > 0)
+  FILTER(?area > 0)
+  FILTER(?gdpRaw > 0)
+
+  SERVICE wikibase:label {
+    bd:serviceParam wikibase:language "ru,en".
+  }
+}
+GROUP BY
+  ?country
+  ?countryLabel
+  ?continentLabel
+  ?capitalLabel
+  ?population
+  ?area
+  ?currencyLabel
+ORDER BY DESC(MAX(?gdpRaw))
+LIMIT 200
