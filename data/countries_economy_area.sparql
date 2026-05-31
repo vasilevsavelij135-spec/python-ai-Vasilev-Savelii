@@ -1,0 +1,40 @@
+# Данные о странах мира: континент, столица, площадь, ВВП, ВВП на душу населения и валюта.
+# Countries data: continent, capital, area, GDP, GDP per capita, and currency.
+
+SELECT
+  ?country
+  ?countryLabel
+  ?continentLabel
+  ?capitalLabel
+  ?area
+  ?gdp
+  ?gdpPerCapita
+  ?currencyLabel
+WHERE {
+  {
+    SELECT
+      ?country
+      (MAX(?areaRaw) AS ?area)
+      (MAX(?gdpRaw) AS ?gdp)
+      (MAX(?gdpPerCapitaRaw) AS ?gdpPerCapita)
+      (SAMPLE(?continentRaw) AS ?continent)
+      (SAMPLE(?capitalRaw) AS ?capital)
+      (SAMPLE(?currencyRaw) AS ?currency)
+    WHERE {
+      ?country wdt:P31 wd:Q6256.
+
+      OPTIONAL { ?country wdt:P2046 ?areaRaw. }
+      OPTIONAL { ?country wdt:P2131 ?gdpRaw. }
+      OPTIONAL { ?country wdt:P2132 ?gdpPerCapitaRaw. }
+      OPTIONAL { ?country wdt:P30 ?continentRaw. }
+      OPTIONAL { ?country wdt:P36 ?capitalRaw. }
+      OPTIONAL { ?country wdt:P38 ?currencyRaw. }
+    }
+    GROUP BY ?country
+  }
+
+  SERVICE wikibase:label {
+    bd:serviceParam wikibase:language "ru,en".
+  }
+}
+ORDER BY DESC(?gdp)
