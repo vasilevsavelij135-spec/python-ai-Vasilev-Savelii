@@ -1,0 +1,23 @@
+# Данные о продолжительности жизни по странам мира за все годы, представленные в Wikidata.
+# Life expectancy data for countries for all years available in Wikidata.
+
+SELECT
+  ?country
+  ?countryLabel
+  ?lifeExpectancy
+  ?date
+WHERE {
+  ?country wdt:P31 wd:Q6256.
+
+  ?country p:P2250 ?lifeStatement.
+  ?lifeStatement ps:P2250 ?lifeExpectancy.
+
+  OPTIONAL {
+    ?lifeStatement pq:P585 ?date.
+  }
+
+  SERVICE wikibase:label {
+    bd:serviceParam wikibase:language "ru,en".
+  }
+}
+ORDER BY ?countryLabel ?date
